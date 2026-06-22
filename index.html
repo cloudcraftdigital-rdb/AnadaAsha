@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apogee Residences — Real Estate Out of This World</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Inter:wght@200;300;400;500&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --gold: #c9a96e;
+            --gold-light: #e8d5a3;
+            --dark: #0a0a0a;
+            --text-light: #f5f5f5;
+            --text-muted: #888;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #000;
+            color: var(--text-light);
+            overflow-x: hidden;
+        }
+
+        /* Navigation */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 24px 48px;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.6), transparent);
+            transition: all 0.4s ease;
+        }
+
+        .navbar.scrolled {
+            background: rgba(0,0,0,0.9);
+            backdrop-filter: blur(10px);
+            padding: 16px 48px;
+        }
+
+        .logo {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 14px;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: var(--text-light);
+        }
+
+        .logo span {
+            display: block;
+            font-size: 9px;
+            letter-spacing: 3px;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 40px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-light);
+            text-decoration: none;
+            font-size: 10px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            transition: color 0.3s;
+            font-weight: 300;
+        }
+
+        .nav-links a:hover {
+            color: var(--gold);
+        }
+
+        .private-viewing {
+            border: 1px solid rgba(255,255,255,0.3);
+            padding: 10px 24px;
+            border-radius: 24px;
+            font-size: 10px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--text-light);
+            background: transparent;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .private-viewing:hover {
+            background: rgba(255,255,255,0.1);
+            border-color: var(--gold);
+        }
+
+        /* Hero Section */
+        .hero {
+            position: relative;
+            height: 100vh;
+            width: 100%;
+            overflow: hidden;
+            background: #000;
+        }
+
+        .hero-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            transition: transform 0.1s linear;
+        }
+
+        .hero-bg.earth {
+            background-image: url('https://images.unsplash.com/photo-1614730341194-75c607400070?q=80&w=2400&auto=format&fit=crop');
+            z-index: 1;
+        }
+
+        .hero-bg.atmosphere {
+            background-image: url('https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?q=80&w=2400&auto=format&fit=crop');
+            z-index: 2;
+            opacity: 0;
+        }
+
+        .hero-bg.clouds {
+            background-image: url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=2400&auto=format&fit=crop');
+            z-index: 3;
+            opacity: 0;
+        }
+
+        .hero-bg.city {
+            background-image: url('https://images.unsplash.com/photo-1486325212027-8081e485255e?q=80&w=2400&auto=format&fit=crop');
+            z-index: 4;
+            opacity: 0;
+        }
+
+        .hero-bg.tower {
+            background-image: url('https://images.unsplash.com/photo-1545558014-8692077e9b5c?q=80&w=2400&auto=format&fit=crop');
+            z-index: 5;
+            opacity: 0;
+        }
+
+        .hero-bg.penthouse {
+            background-image: url('https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?q=80&w=2400&auto=format&fit=crop');
+            z-index: 6;
+            opacity: 0;
+        }
+
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, transparent 40%, rgba(0,0,0,0.4) 100%);
+            z-index: 10;
+            pointer-events: none;
+        }
+
+        /* Hero Content */
+        .hero-content {
+            position: absolute;
+            top: 50%;
+            left: 80px;
+            transform: translateY(-50%);
+            z-index: 20;
+            max-width: 500px;
+        }
+
+        .hero-label {
+            font-size: 9px;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: var(--gold-light);
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .hero-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 56px;
+            font-weight: 300;
+            line-height: 1.1;
+            margin-bottom: 16px;
+            color: var(--text-light);
+        }
+
+        .hero-title em {
+            color: var(--gold);
+            font-style: italic;
+        }
+
+        .hero-subtitle {
+            font-size: 11px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-bottom: 32px;
+        }
+
+        .hero-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 32px;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 30px;
+            color: var(--text-light);
+            text-decoration: none;
+            font-size: 11px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            transition: all 0.3s;
+            backdrop-filter: blur(10px);
+        }
+
+        .hero-cta:hover {
+            background: rgba(255,255,255,0.2);
+            border-color: var(--gold);
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 20;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            animation: bounce 2s infinite;
+        }
+
+        .scroll-indicator span {
+            font-size: 9px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+        }
+
+        .scroll-line {
+            width: 1px;
+            height: 40px;
+            background: linear-gradient(to bottom, var(--gold), transparent);
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(10px); }
+        }
+
+        /* Section 2 - Penthouse */
+        .penthouse-section {
+            position: relative;
+            height: 100vh;
+            width: 100%;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .penthouse-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?q=80&w=2400&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+        }
+
+        .penthouse-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.3);
+        }
+
+        .penthouse-content {
+            position: relative;
+            z-index: 20;
+            text-align: center;
+        }
+
+        .penthouse-label {
+            font-size: 10px;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: var(--gold-light);
+            margin-bottom: 16px;
+        }
+
+        .penthouse-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 48px;
+            font-weight: 300;
+            margin-bottom: 24px;
+        }
+
+        .penthouse-title em {
+            color: var(--gold);
+            font-style: italic;
+        }
+
+        .penthouse-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 32px;
+            background: rgba(255,255,255,0.15);
+            border: 1px solid rgba(255,255,255,0.3);
+            border-radius: 30px;
+            color: var(--text-light);
+            text-decoration: none;
+            font-size: 11px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            transition: all 0.3s;
+            backdrop-filter: blur(10px);
+        }
+
+        .penthouse-cta:hover {
+            background: rgba(255,255,255,0.25);
+            border-color: var(--gold);
+        }
+
+        /* Stars Animation */
+        .stars {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        .star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 3s infinite;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 16px 24px;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+            
+            .hero-content {
+                left: 24px;
+                right: 24px;
+                max-width: none;
+            }
+            
+            .hero-title {
+                font-size: 36px;
+            }
+            
+            .penthouse-title {
+                font-size: 32px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="logo">
+            APOGEE
+            <span>Residences</span>
+        </div>
+        <ul class="nav-links">
+            <li><a href="#residences">Residences</a></li>
+            <li><a href="#tower">The Tower</a></li>
+            <li><a href="#amenities">Amenities</a></li>
+            <li><a href="#penthouse">Penthouse</a></li>
+            <li><a href="#enquire">Enquire</a></li>
+        </ul>
+        <button class="private-viewing">Private Viewing</button>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="hero">
+        <div class="hero-bg earth" id="bg-earth"></div>
+        <div class="hero-bg atmosphere" id="bg-atmosphere"></div>
+        <div class="hero-bg clouds" id="bg-clouds"></div>
+        <div class="hero-bg city" id="bg-city"></div>
+        <div class="hero-bg tower" id="bg-tower"></div>
+        <div class="hero-bg penthouse" id="bg-penthouse"></div>
+        
+        <div class="stars" id="stars"></div>
+        
+        <div class="hero-overlay"></div>
+        
+        <div class="hero-content" id="hero-content">
+            <span class="hero-label">The World's Highest Address</span>
+            <h1 class="hero-title">Real Estate<br><em>Out of This World</em></h1>
+            <p class="hero-subtitle">Full-floor · Private Elevator · Sky Concierge</p>
+            <a href="#explore" class="hero-cta">Explore Residences →</a>
+        </div>
+
+        <div class="scroll-indicator" id="scroll-indicator">
+            <span>Scroll</span>
+            <div class="scroll-line"></div>
+        </div>
+    </section>
+
+    <!-- Penthouse Section -->
+    <section class="penthouse-section" id="penthouse">
+        <div class="penthouse-bg"></div>
+        <div class="penthouse-overlay"></div>
+        <div class="penthouse-content">
+            <span class="penthouse-label">Luxury Real Estate</span>
+            <h2 class="penthouse-title">Penthouses<br><em>Above the Clouds</em></h2>
+            <a href="#tour" class="penthouse-cta">Arrange a Private Tour</a>
+        </div>
+    </section>
+
+    <script>
+        // Generate stars
+        const starsContainer = document.getElementById('stars');
+        for (let i = 0; i < 100; i++) {
+            const star = document.createElement('div');
+            star.className = 'star';
+            star.style.left = Math.random() * 100 + '%';
+            star.style.top = Math.random() * 100 + '%';
+            star.style.animationDelay = Math.random() * 3 + 's';
+            star.style.animationDuration = (2 + Math.random() * 3) + 's';
+            starsContainer.appendChild(star);
+        }
+
+        // Scroll-driven zoom animation
+        const bgEarth = document.getElementById('bg-earth');
+        const bgAtmosphere = document.getElementById('bg-atmosphere');
+        const bgClouds = document.getElementById('bg-clouds');
+        const bgCity = document.getElementById('bg-city');
+        const bgTower = document.getElementById('bg-tower');
+        const bgPenthouse = document.getElementById('bg-penthouse');
+        const heroContent = document.getElementById('hero-content');
+        const scrollIndicator = document.getElementById('scroll-indicator');
+        const navbar = document.getElementById('navbar');
+
+        let scrollProgress = 0;
+        let targetProgress = 0;
+
+        function updateZoom() {
+            scrollProgress += (targetProgress - scrollProgress) * 0.08;
+            
+            const p = scrollProgress;
+            
+            // Earth zoom and fade
+            const earthScale = 1 + p * 4;
+            const earthOpacity = 1 - Math.max(0, (p - 0.1) * 3);
+            bgEarth.style.transform = `scale(${earthScale})`;
+            bgEarth.style.opacity = earthOpacity;
+            
+            // Atmosphere
+            const atmOpacity = Math.max(0, Math.min(1, (p - 0.05) * 4)) * (1 - Math.max(0, (p - 0.3) * 3));
+            bgAtmosphere.style.opacity = atmOpacity;
+            bgAtmosphere.style.transform = `scale(${1 + (p - 0.05) * 3})`;
+            
+            // Clouds
+            const cloudOpacity = Math.max(0, Math.min(1, (p - 0.15) * 4)) * (1 - Math.max(0, (p - 0.45) * 3));
+            bgClouds.style.opacity = cloudOpacity;
+            bgClouds.style.transform = `scale(${1 + (p - 0.15) * 3})`;
+            
+            // City
+            const cityOpacity = Math.max(0, Math.min(1, (p - 0.3) * 4)) * (1 - Math.max(0, (p - 0.6) * 3));
+            bgCity.style.opacity = cityOpacity;
+            bgCity.style.transform = `scale(${1 + (p - 0.3) * 2.5})`;
+            
+            // Tower
+            const towerOpacity = Math.max(0, Math.min(1, (p - 0.45) * 4)) * (1 - Math.max(0, (p - 0.75) * 4));
+            bgTower.style.opacity = towerOpacity;
+            bgTower.style.transform = `scale(${1 + (p - 0.45) * 2})`;
+            
+            // Penthouse
+            const pentOpacity = Math.max(0, Math.min(1, (p - 0.6) * 3));
+            bgPenthouse.style.opacity = pentOpacity;
+            bgPenthouse.style.transform = `scale(${1 + (p - 0.6) * 1.5})`;
+            
+            // Content fade
+            heroContent.style.opacity = 1 - p * 2;
+            heroContent.style.transform = `translateY(${-p * 100}px)`;
+            
+            // Scroll indicator
+            scrollIndicator.style.opacity = 1 - p * 5;
+            
+            // Stars fade
+            starsContainer.style.opacity = 1 - p * 3;
+            
+            requestAnimationFrame(updateZoom);
+        }
+
+        window.addEventListener('scroll', () => {
+            const heroHeight = document.getElementById('hero').offsetHeight;
+            targetProgress = Math.min(1, window.scrollY / heroHeight);
+        });
+
+        // Navbar scroll effect
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        updateZoom();
+
+        // Parallax on mouse move for hero
+        document.getElementById('hero').addEventListener('mousemove', (e) => {
+            const x = (e.clientX / window.innerWidth - 0.5) * 20;
+            const y = (e.clientY / window.innerHeight - 0.5) * 20;
+            
+            bgEarth.style.transform += ` translate(${x * 0.5}px, ${y * 0.5}px)`;
+        });
+    </script>
+    <footer>
+        <p>&copy; AnadaAsha.All rights reserved.</p>
+    </footer>
+
+</body>
+</html>
